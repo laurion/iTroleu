@@ -1,0 +1,25 @@
+{
+  "lines": {
+    "m1": ["Dristor 2", "Piata Muncii", "Piata Iancului", "Obor", "Stefan cel Mare",
+            "Piata Victoriei 1", "Gara de Nord 1", "Basarab 1", "Crangasi",
+            "Petrache Poenaru", "Grozavesti", "Eroilor", "Izvor", "Piata Unirii 1",
+            "Timpuri Noi", "Mihai Bravu", "Dristor 1", "Nicolae Grigorescu 1",
+            "Titan", "Costin Georgian", "Republica"],
+    "m3": ["Preciziei", "Pacii", "Gorjului", "Lujerului", "Politehnica",
+            "Eroilor", "Izvor", "Piata Unirii 1", "Timpuri Noi", "Mihai Bravu",
+            "Dristor 1", "Nicolae Grigorescu 1", "1 Decembrie 1918", "Policolor",
+            "Anghel Saligny"],
+    "m2": ["Pipera", "Aurel Vlaicu", "Aviatorilor", "Piata Victoriei 2", "Piata Romana",
+            "Universitate", "Piata Unirii 2", "Tineretului", "Eroii Revolutiei", 
+            "Constantin Brancoveanu", "Piata Sudului", "Aparatorii Patriei", 
+            "Dimitrie Leonida", "Berceni"],
+    "m4": ["Laminorului", "Parc Bazilescu", "Jiului", "1 Mai", "Grivitei", "Basarab 2", "Gara de Nord 2"]
+  },
+  "links": [
+    ["Piata Victoriei 1", "Piata Victoriei 2"],
+    ["Piata Unirii 1", "Piata Unirii 2"],
+    ["Nicolae Grigorescu 1", "Nicolae Grigorescu 2"],
+    ["Gara de Nord 1", "Gara de Nord 2"],
+    ["Basarab 1", "Basarab 2"]
+  ]
+}
