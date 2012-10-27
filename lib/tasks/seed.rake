@@ -43,4 +43,33 @@ namespace :seed do
       f.close
     end
   end
+  
+  task :create_stations_with_coords => :environment do
+    STATION_URLS_FILE = File.join Rails.root.to_s, 'db', 'fixtures', 'station_urls.txt'
+    
+    File.open(STATION_URLS_FILE, 'r') do |f1|
+      all_stations = {}
+      i = 0
+      while line = f1.gets
+        open line, "User-Agent" => USER_AGENT do |f|
+          dom = Nokogiri::HTML f
+          name = dom.css('div[class=Page-Left-Title]').css('h1').text.sub(' Statia ', '')
+          coords = dom.css('span[class=Item-Address-Coordinates]')
+          station = {}
+          station[:name] = name
+          station[:lon] = coords.to_s.scan(/\d{1,}[.]\d{1,}/)[0]
+          station[:lat] = coords.to_s.scan(/\d{1,}[.]\d{1,}/)[1]
+          
+          all_stations[i] = station
+          
+          i += 1
+          
+          puts "#{i} station"
+        end
+      end
+      f = open(STATIONS_JSON, 'w')
+      f.write JSON.dump all_stations
+      f.close
+    end
+  end
 end
