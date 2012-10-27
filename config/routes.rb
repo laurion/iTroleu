@@ -1,4 +1,5 @@
 ITroleu::Application.routes.draw do
+  root :to => 'dashboard#start'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
