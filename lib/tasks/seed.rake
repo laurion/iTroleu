@@ -5,6 +5,7 @@ require 'restclient'
 STATIONS_URL = "http://www.ratb.ro/statii.php"
 USER_AGENT = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/125.2 (KHTML, like Gecko) Safari/125.8'
 STATIONS_JSON = File.join Rails.root.to_s, 'db', 'fixtures', 'stations.json'
+BUSES_JSON = File.join Rails.root.to_s, 'db', 'fixtures', 'buses.json'
 
 def station_buses(station_name)
   RestClient.post STATIONS_URL, {'tlin6' => station_name} do |f|
@@ -26,16 +27,18 @@ namespace :seed do
   end
 
   task :create_buses_json => :environment do
-    all_buses = []
+    all_buses = {}
     open(STATIONS_JSON, 'r') do |file|
       stations = JSON.load file.read
       stations.each do |station|
+        puts "Computing for station #{station}"
         buses = station_buses station
-        all_buses <<= buses.split(',')
+        ret = buses.split(',')
+        all_buses[station] = ret
       end
     end
 
-    open(BUSES_JSON, 'w') do |file|
+    open(BUSES_JSON, 'w') do |f|
       f.write JSON.dump all_buses
       f.close
     end
