@@ -7,9 +7,9 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/125.2 (KH
 STATIONS_JSON = File.join Rails.root.to_s, 'db', 'fixtures', 'stations.json'
 
 def station_buses(station_name)
-  RestClient.post URL, {'tlin6' => station_name} do |f|
+  RestClient.post STATIONS_URL, {'tlin6' => station_name} do |f|
     dom = Nokogiri::HTML f
-    puts dom.css('table')[2].css('tr')[1].css('td')[1]
+    return dom.css('table')[3].css('tr')[1].css('td')[1].text
   end
 end
  
@@ -21,6 +21,22 @@ namespace :seed do
 
       f = open(STATIONS_JSON, 'w')
       f.write JSON.dump stations
+      f.close
+    end
+  end
+
+  task :create_buses_json => :environment do
+    all_buses = []
+    open(STATIONS_JSON, 'r') do |file|
+      stations = JSON.load file.read
+      stations.each do |station|
+        buses = station_buses station
+        all_buses <<= buses.split(',')
+      end
+    end
+
+    open(BUSES_JSON, 'w') do |file|
+      f.write JSON.dump all_buses
       f.close
     end
   end

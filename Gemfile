@@ -8,7 +8,7 @@ gem 'rails', '3.2.3'
 gem 'jquery_mobile_rails'
 
 group :development do
-  gem 'sqlite3'
+  gem 'pg'
 end
 
 group :production do 
