@@ -83,7 +83,7 @@ namespace :seed do
           :name => val["name"],
           :long => val["lon"],
           :lat => val["lat"],
-          :type => "bus"
+          :station_type => "bus"
         )
         puts "S-a salvat statia #{val["name"]}: #{station.save}"
       end
