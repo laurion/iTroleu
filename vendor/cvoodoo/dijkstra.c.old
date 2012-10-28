@@ -1,0 +1,118 @@
+#include "dijkstra.h"
+#include "strcmp95.c"
+ 
+int Nr_Stations, Nr_Lines;
+
+station stations[MAX_STATIONS];
+line lines[MAX_LINES];
+        
+int get_station_id(char *station_name) {
+  int i, len, current_len = strlen(station_name);
+  int maxim = 0, max_i = 0;
+  double dist;
+
+  for (i = 0; i < Nr_Stations; ++ i) {
+    len = max(stations[i].name_length, current_len);
+
+    dist = strcmp95(stations[i].name, station_name, len);
+
+    //if (dist >= 0.98)
+    if (dist >= 0.98 && dist >= maxim) {
+      maxim = dist;
+      max_i = i;
+    }
+  }
+
+  return maxim >= 0.98 ? max_i : -1;
+}
+
+void read_stations() {
+  FILE *stations_file;
+  int i;
+
+  stations_file = fopen("stations.in", "r");
+
+  assert(fscanf(stations_file, "%d\n", &Nr_Stations) == 1);
+  
+  for (i = 0; i < Nr_Stations; ++ i) {
+    fgets(stations[i].name, MAX_STATION_NAME, stations_file);
+    assert(fscanf(stations_file, "%lf%lf\n", 
+          &stations[i].c.lat, &stations[i].c.lng) == 2);
+    strtok(stations[i].name, "\n");
+    lowercase(stations[i].name);
+    stations[i].name_length = strlen(stations[i].name);
+  }
+  fclose(stations_file);
+}
+
+void read_lines() {
+  int i, j, station_id, cnt = 0, cnt2 = 0;
+  char station_name[MAX_STATION_NAME];
+  FILE *lines_file;
+
+  lines_file = fopen("lines.in", "r");
+  assert(fscanf(lines_file, "%d\n", &Nr_Lines) == 1);
+  
+  for (i = 0; i < Nr_Lines; ++ i) {
+    fgets(lines[i].name, MAX_LINE_NAME, lines_file);
+    strtok(lines[i].name, "\n");
+
+    fprintf(stderr, "%s\n", lines[i].name);
+    assert(fscanf(lines_file, "%d%d\n", &lines[i].s_tur, &lines[i].s_retur) == 2);
+
+    lines[i].ss_tur = (int*) malloc((lines[i].s_tur + 7) * sizeof(int));
+    lines[i].ss_retur = (int*) malloc((lines[i].s_retur + 7) * sizeof(int));
+    
+    for (j = 0, cnt = 0; j < lines[i].s_tur; ++ j) {
+      fgets(station_name, MAX_STATION_NAME, lines_file);
+      strtok(station_name, "\n");
+      lowercase(station_name);
+      
+      station_id = get_station_id(station_name);
+      if (station_id == -1) {continue;}
+      lines[i].ss_tur[cnt ++] = station_id;
+    }
+    lines[i].s_tur = cnt;
+
+    for (j = 0, cnt = 0; j < lines[i].s_retur; ++ j) {
+      fgets(station_name, MAX_STATION_NAME, lines_file);
+      strtok(station_name, "\n");
+      lowercase(station_name);
+
+      station_id = get_station_id(station_name);
+      if (station_id == -1) {continue;}
+      lines[i].ss_retur[cnt ++] = station_id;
+    }
+    lines[i].s_retur = cnt;
+  }
+  fclose(lines_file);
+}
+
+void put_lines() {
+  int i, j;
+  FILE * fout = fopen("routes.out", "w");
+
+  fprintf(fout, "%d\n", Nr_Lines);
+
+  for (i = 0; i < Nr_Lines; ++ i) {
+    fprintf(fout, "%s\n", lines[i].name);
+
+    fprintf(fout, "%d ", lines[i].s_tur);
+    for (j = 0; j < lines[i].s_tur; ++ j)
+      fprintf(fout, "%d ", lines[i].ss_tur[j]);
+    fprintf(fout, "\n");
+
+    fprintf(fout, "%d ", lines[i].s_retur);
+    for (j = 0; j < lines[i].s_retur; ++ j)
+      fprintf(fout, "%d ", lines[i].ss_retur[j]);
+    fprintf(fout, "\n");
+  }
+  fclose(fout);
+}
+
+int main () {
+  read_stations();
+  read_lines();
+  put_lines();
+  return 0;
+}
