@@ -50,7 +50,6 @@ function initializeMap(mapParams) {
 }
 
 function setCurrentPosition(pos) {
-  console.log(pos.coords.latitude, pos.coords.longitude);
   var latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
   marker.setPosition(latlng);
   map.setCenter(latlng);
@@ -58,7 +57,6 @@ function setCurrentPosition(pos) {
 }
 
 function showGeolocation(latLng) {
-  console.log(latLng);
   geocoder.geocode({'latLng': latLng}, function(results, status) {
     var address = results[1].formatted_address;
     $(map.jqParams.point_input).val(address);
@@ -66,18 +64,14 @@ function showGeolocation(latLng) {
 }
 
 function setPositionInput(pos) {
-  console.log("Da pos", pos);
   $(map.jqParams.latInput).val(pos.latLng.Ya);
   $(map.jqParams.lngInput).val(pos.latLng.Za);
-  console.log($(map.jqParams.latInput).val());
-  console.log($(map.jqParams.lngInput).val());
   showGeolocation(pos.latLng);
 }
 
 $(document).live('pageshow', function (event, ui) {
   var page = $('.ui-page-active');
   var page_url = $(page).find('div[data-role=content]').attr('pageurl');
-  console.log(page_url);
   if (page_url == 'starting') {
     var jqparams = {
       point_input: $(page).find('.start_point_input'),
@@ -98,10 +92,12 @@ $(document).live('pageshow', function (event, ui) {
 })
 
 function showStationOnMap(station) {
-  var image = '/images/icons/bus.png';
-  var lat = parseFloat(stations["lat"]);
-  var lng = parseFloat(stations["lng"]);
+  //console.log(station);
+  var image = '/icons/bus.png';
+  var lat = parseFloat(station["lat"]);
+  var lng = parseFloat(station["lon"]);
   var myLatLng = new google.maps.LatLng(lat, lng);
+  console.log(myLatLng);
   var beachMarker = new google.maps.Marker({
       position: myLatLng,
       map: map,
@@ -109,13 +105,23 @@ function showStationOnMap(station) {
   });
 }
 
-$(document).ready(function() {
-  $.get('/json/stations.json', function(res) {
-    res = $.parseJSON(res);
+function addStationsOnMap(res) {
+  if (! map) {
+    console.log("timeout");
+    setTimeout(function() {
+      addStationsOnMap(res), 100
+    })
+  } else {
     _.each(res, function (val) {
       setTimeout(function() {
         showStationOnMap(val), 2000
       })
     })
+  }
+}
+
+$(document).ready(function() {
+  $.get('/json/stations.json', function(res) {
+    addStationsOnMap(res);
   })
 });
