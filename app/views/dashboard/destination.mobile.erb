@@ -1,5 +1,5 @@
 <div data-role="header">
-  <a href="<%= destination_url %>" data-icon="back">Destination</a>
+  <a href="<%= start_url :rand => SecureRandom.random_number %>" data-icon="back">Starting point</a>
   <h1>Destination</h1>
 </div>
 
@@ -8,8 +8,8 @@
     <div data-role="fieldcontain">
         <label for="name">Destination Point:</label>
         <input type="text" name="destination_point" class="destination_point_input" value="" />
-        <input type="hidden" class="destination_latitude" name="pos[lat]">
-        <input type="hidden" class="destination_longitude" name="pos[lng]">
+        <input type="hidden" class="destination_latitude" name="pos[lat]" value="<%= session[:end_coords][:lat] %>">
+        <input type="hidden" class="destination_longitude" name="pos[lng]" value="<%= session[:end_coords][:lng] %>">
     </div>
     <div class="map_canvas" style="width:100%; height:350px"></div>
 

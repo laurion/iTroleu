@@ -34,13 +34,19 @@ function initializeMap(mapParams) {
   setMarker(map.getCenter());
 
   var session_coord = {
-    lat: $(mapParams.latInput).val(),
-    lng: $(mapParams.lngInput).val()
+    lat: parseFloat($(mapParams.latInput).val()),
+    lng: parseFloat($(mapParams.lngInput).val())
   }
   if (navigator.geolocation && !session_coord.lat && !session_coord.lng) {
     navigator.geolocation.getCurrentPosition(setCurrentPosition);
   } else if (session_coord.lat && session_coord.lng) {
-    setPositionInput({latLng: session_coord})
+    //var latlng = new google.maps.LatLng(session_coord.lat, session_coord.lng);
+    setCurrentPosition({
+      coords: {
+        latitude: session_coord.lat,
+        longitude: session_coord.lng,
+      }
+    })
   }
 }
 
@@ -61,9 +67,11 @@ function showGeolocation(latLng) {
 }
 
 function setPositionInput(pos) {
-  console.log(pos);
+  console.log("Da pos", pos);
   $(map.jqParams.latInput).val(pos.latLng.Ya);
   $(map.jqParams.lngInput).val(pos.latLng.Za);
+  console.log($(map.jqParams.latInput).val());
+  console.log($(map.jqParams.lngInput).val());
   showGeolocation(pos.latLng);
 }
 
@@ -78,6 +86,7 @@ $(document).live('pageshow', function (event, ui) {
       lngInput: $(page).find('.start_longitude'),
       mapCanvas: $(page).find('.map_canvas')
     }
+    initializeMap(jqparams);
   } else if (page_url == 'destination') {
     var jqparams = {
       point_input: $(page).find('.destination_point_input'),
@@ -85,7 +94,6 @@ $(document).live('pageshow', function (event, ui) {
       lngInput: $(page).find('.destination_longitude'),
       mapCanvas: $(page).find('.map_canvas')
     } 
+    initializeMap(jqparams);
   }
-  console.log(jqparams);
-  initializeMap(jqparams);
 })

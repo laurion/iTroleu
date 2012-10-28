@@ -7,8 +7,8 @@
     <div data-role="fieldcontain">
         <label for="name">Starting Point:</label>
         <input type="text" name="start_point" class="start_point_input" value="" />
-        <input type="hidden" class="start_latitude" name="pos[lat]">
-        <input type="hidden" class="start_longitude" name="pos[lng]">
+        <input type="hidden" class="start_latitude" name="pos[lat]" value="<%= session[:start_coords][:lat] %>">
+        <input type="hidden" class="start_longitude" name="pos[lng]" value="<%= session[:start_coords][:lng] %>">
     </div>
     <div class="map_canvas" style="width:100%; height:350px"></div>
 

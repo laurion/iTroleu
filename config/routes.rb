@@ -1,6 +1,8 @@
 ITroleu::Application.routes.draw do
-  root :to => 'dashboard#start'
-  post'destination', :to => 'dashboard#destination', :as => "destination"
+  root :to => 'dashboard#start', :as => "start"
+  get 'destination', :to => 'dashboard#destination', :as => "destination"
+  get 'search', :to => 'dashboard#search', :as => "search"
+  post 'destination', :to => 'dashboard#destination', :as => "destination"
   post 'search', :to => 'dashboard#search', :as => "search"
   # The priority is based upon order of creation:
   # first created -> highest priority.
