@@ -3,9 +3,10 @@ class DashboardController < ApplicationController
   end
 
   def destination
-    session[:start_coords] = {:long => params[:long], :lat => params[:lat]}
+    session[:start_coords] = params[:pos]
   end
 
   def search
+    session[:end_coords] = params[:pos]
   end
 end
