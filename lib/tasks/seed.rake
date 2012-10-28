@@ -72,4 +72,21 @@ namespace :seed do
       f.close
     end
   end
+
+  task :add_stations_to_db => :environment do
+    Station.destroy_all
+
+    open(STATIONS_JSON, 'r') do |f|
+      ret = JSON.load(f.read)
+      ret.each do |key, val|
+        station = Station.new(
+          :name => val["name"],
+          :long => val["lon"],
+          :lat => val["lat"],
+          :type => "bus"
+        )
+        puts "S-a salvat statia #{val["name"]}: #{station.save}"
+      end
+    end
+  end
 end

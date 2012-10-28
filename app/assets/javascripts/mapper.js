@@ -40,7 +40,6 @@ function initializeMap(mapParams) {
   if (navigator.geolocation && !session_coord.lat && !session_coord.lng) {
     navigator.geolocation.getCurrentPosition(setCurrentPosition);
   } else if (session_coord.lat && session_coord.lng) {
-    //var latlng = new google.maps.LatLng(session_coord.lat, session_coord.lng);
     setCurrentPosition({
       coords: {
         latitude: session_coord.lat,
@@ -97,3 +96,26 @@ $(document).live('pageshow', function (event, ui) {
     initializeMap(jqparams);
   }
 })
+
+function showStationOnMap(station) {
+  var image = '/images/icons/bus.png';
+  var lat = parseFloat(stations["lat"]);
+  var lng = parseFloat(stations["lng"]);
+  var myLatLng = new google.maps.LatLng(lat, lng);
+  var beachMarker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      icon: image
+  });
+}
+
+$(document).ready(function() {
+  $.get('/json/stations.json', function(res) {
+    res = $.parseJSON(res);
+    _.each(res, function (val) {
+      setTimeout(function() {
+        showStationOnMap(val), 2000
+      })
+    })
+  })
+});

@@ -4,6 +4,8 @@ ITroleu::Application.routes.draw do
   get 'search', :to => 'dashboard#search', :as => "search"
   post 'destination', :to => 'dashboard#destination', :as => "destination"
   post 'search', :to => 'dashboard#search', :as => "search"
+
+  resources :stations
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
