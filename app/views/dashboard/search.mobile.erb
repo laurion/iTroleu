@@ -1,0 +1,11 @@
+<div data-role="header">
+  <a href="<%= destination_url :rand => SecureRandom.random_number %>" data-icon="back">Destination</a>
+  <h1>Search result</h1>
+</div>
+
+<div data-role="content">
+  Start lat: <%= session[:start_coords][:lat] %>
+  Start lng: <%= session[:start_coords][:lng] %>
+  Destination lat: <%= session[:end_coords][:lat] %>
+  Destination lng: <%= session[:end_coords][:lng] %>
+</div>
