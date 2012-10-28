@@ -23,7 +23,7 @@ end
 def route_stations(route_name)
   RestClient.post ROUTES_URL, {'tlin3' => route_name} do |f|
     dom = Nokogiri::HTML f
-    return dom.css('table')[5].css('tr').css('td').to_s.scan(/<td>([^<>\d]*)<\/td>\n<td>/imu).to_a
+    return dom.css('table')[5].css('tr').css('td').to_s.scan(/<td>([^<>\d]*)<\/td>\n<td>/imu)
   end
 end
  
